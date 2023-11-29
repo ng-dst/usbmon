@@ -92,8 +92,12 @@ int main(int argc, char** argv) {
             {NULL, NULL}
             };
 
-    if (!StartServiceCtrlDispatcher(DispatchTable))
+    if (!StartServiceCtrlDispatcher(DispatchTable)) {
         SvcReportEvent(EVENTLOG_ERROR_TYPE, "StartServiceCtrlDispatcher failed");
+        // Could just run manually from terminal?
+        printf("Cannot run manually without arguments. Use 'h' or 'help' for help\n");
+        return EXIT_FAILURE;
+    }
 
     return EXIT_SUCCESS;
 }
