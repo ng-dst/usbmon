@@ -16,7 +16,7 @@ Can block certain devices based on Hardware ID.
 * `allow <HardwareID>` &nbsp;  Remove device from deny list *
 * `denylist` &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  Print deny list
 * `logfile [path]` &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; Get or set* absolute path (like `C:\log.txt`) for log file
-* `h`, `help` &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Print help message
+* `h`, `help` &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; Print help message
 
 _*_ requires administrative privileges (Run as Admin)
 
@@ -53,4 +53,14 @@ If `LogFile` is not set, logs are sent to *_Event Log_* only.
 * Device notifications: https://www.codeproject.com/Articles/15612/Receiving-Device-Event-Notification-in-Windows-Ser
   * *_Note_*: do not set `DEVICE_NOTIFY_ALL_INTERFACE_CLASSES`, instead specify `classguid` (see `SvcMain()` in `service.c`)
 * Working with registry: https://learn.microsoft.com/en-us/windows/win32/api/winreg/nf-winreg-regqueryvalueexa 
-* Handle USB events: https://learn.microsoft.com/en-us/answers/questions/985652/getting-instance-id-of-usb-drive-from-registerdevi
+  * Handle USB events: https://learn.microsoft.com/en-us/answers/questions/985652/getting-instance-id-of-usb-drive-from-registerdevi
+
+
+
+        ∩――――――――――――∩                .      .
+        ||   ∧  ﾍ　 ||    . ゜ ﾟ.  ゜     ✧    。
+        ||  (* ´ ｰ`) ZZzz     °   ★   ﾟ     ゜    ✧
+        |ﾉ^⌒⌒づ`￣￣ ＼             ﾟ。 ﾟ  ★  ｡ﾟ 
+        (  ノ　　⌒  ヽ  ＼         ﾟ    ★    。  
+        ＼　　 ||￣￣￣￣￣||               ﾟ
+        　 ＼,ﾉ||         || 
