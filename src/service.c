@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <windows.h>
-#include <setupapi.h>
 #include <dbt.h>
 #include <usbiodef.h>
-#include "../include/service.h"
-#include "../include/usbmon.h"
-#include "../include/event.h"
+#include <tchar.h>
+#include "service.h"
+#include "usbmon.h"
+#include "event.h"
 
 
 SERVICE_STATUS gSvcStatus;
@@ -13,7 +13,7 @@ SERVICE_STATUS_HANDLE gSvcStatusHandle;
 HANDLE ghSvcStopEvent = NULL;
 
 
-void SvcInstall() {
+int SvcInstall() {
     /**
      * @brief Install UsbMonitor service in SCM database
      *
@@ -22,11 +22,13 @@ void SvcInstall() {
     SC_HANDLE schSCManager;
     SC_HANDLE schService;
     TCHAR path[MAX_PATH] = {0};
+    int res;
 
     // path = \" <name> \"
     if (!GetModuleFileName(NULL, path+1, MAX_PATH-2)) {
-        printf("Could not install service (%lu)\n", GetLastError());
-        return;
+        res = GetLastError();
+        printf("Could not install service (%d)\n", res);
+        return res;
     }
     path[0] = '"';
     path[strlen(path)+1] = '\0';
@@ -34,7 +36,10 @@ void SvcInstall() {
 
     schSCManager = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
     if (!schSCManager) {
-        printf("OpenSCManager failed (%lu)\n", GetLastError());
+        res = GetLastError();
+        if (res == ERROR_ACCESS_DENIED) printf("Access denied. Try to run as administrator\n");
+        else printf("OpenSCManager failed (%d)\n", res);
+        return res;
     }
 
     schService = CreateService(
@@ -53,14 +58,63 @@ void SvcInstall() {
             NULL
             );
     if (!schService) {
-        printf("CreateService failed (%lu)\n", GetLastError());
+        res = GetLastError();
+        if (res == ERROR_SERVICE_EXISTS) printf("Service is already installed\n");
+        else printf("CreateService failed (%d)\n", res);
         CloseServiceHandle(schSCManager);
-        return;
+        return res;
     }
-    else printf("Service installed successfully\n");
+
+    printf("Service installed successfully\n");
 
     CloseServiceHandle(schService);
     CloseServiceHandle(schSCManager);
+    return ERROR_SUCCESS;
+}
+
+
+int SvcUninstall() {
+    /**
+     * @brief Uninstall UsbMonitor service from SCM database
+     */
+
+    SC_HANDLE schService;
+    SC_HANDLE schSCManager;
+    DWORD res;
+
+    schSCManager = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
+    if (!schSCManager) {
+        res = GetLastError();
+        if (res == ERROR_ACCESS_DENIED) printf("Access denied. Try to run as administrator\n");
+        else printf("OpenSCManager failed (%d)\n", res);
+        return res;
+    }
+
+    schService = OpenService(
+            schSCManager,
+            SVCNAME,
+            SERVICE_ALL_ACCESS);
+
+    if (!schService) {
+        res = GetLastError();
+        if (res == ERROR_SERVICE_DOES_NOT_EXIST) printf("Service is not installed\n");
+        else printf("OpenService failed (%d)\n", res);
+        CloseServiceHandle(schSCManager);
+        return res;
+    }
+
+    res = ERROR_SUCCESS;
+
+    if (DeleteService(schService))
+        printf("Service uninstalled\n");
+    else {
+        res = GetLastError();
+        printf("Could not uninstall service (%d). Stop the service before uninstalling\n", res);
+    }
+
+    CloseServiceHandle(schService);
+    CloseServiceHandle(schSCManager);
+    return res;
 }
 
 
@@ -115,6 +169,7 @@ void SvcInit(DWORD argc, LPTSTR *argv) {
 
     // Report as running
     ReportSvcStatus(SERVICE_RUNNING, NO_ERROR, 0);
+    SvcReportEvent(EVENTLOG_INFORMATION_TYPE, "Service is running");
 
     // Stop service when stop signal is received
     WaitForSingleObject(ghSvcStopEvent, INFINITE);

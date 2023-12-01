@@ -20,11 +20,11 @@
 #define LOG_FILE _T("LogFile")
 
 
-void TransformRegistryKey(TCHAR* str) {
+void TransformRegistryKey(LPTSTR str) {
     /**
      * @brief Replace any invalid characters with underscore
      */
-    TCHAR* invalidChars = _T("\\/:*?\"<>|");
+    TCHAR* invalidChars = _T("\\/:*\"<>|");
     TCHAR* replacementChar = _T("_");
 
     size_t strLength = _tcslen(str);
@@ -189,7 +189,7 @@ WINBOOL PrintDenyList() {
     DWORD cbSubkey = MAX_PATH;
 
     printf("List of banned devices:\n");
-    while (ERROR_SUCCESS == RegEnumValueA(denyListKey, dwIndex, szSubkey, &cbSubkey, NULL, NULL, NULL, NULL)) {
+    while (ERROR_SUCCESS == RegEnumValue(denyListKey, dwIndex, szSubkey, &cbSubkey, NULL, NULL, NULL, NULL)) {
         printf(_T("%s\n"), szSubkey);
         dwIndex++;
         cbSubkey = sizeof(szSubkey);
@@ -218,7 +218,7 @@ WINBOOL IsInDenyList(LPCTSTR hardwareId) {
     DWORD valueType;
     DWORD bufferSize = 0;
 
-    LPTSTR hardwareIdClean = strdup(hardwareId);
+    LPTSTR hardwareIdClean = _tcsdup(hardwareId);
     if (!hardwareIdClean) return FALSE;
 
     TransformRegistryKey(hardwareIdClean);

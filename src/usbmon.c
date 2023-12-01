@@ -1,8 +1,8 @@
 #include <stdio.h>
-#include "../include/usbmon.h"
-#include "../include/devinfo.h"
-#include "../include/event.h"
-#include "../include/cfg.h"
+#include "usbmon.h"
+#include "devinfo.h"
+#include "event.h"
+#include "cfg.h"
 
 #define BUF_LEN 512
 
@@ -55,6 +55,7 @@ void WINAPI ProcessUsbEvent(PDEV_BROADCAST_DEVICEINTERFACE pDevInf, DWORD dwEven
         // In deny list (or missing hwId) => block and report
         if (!hwId || IsInDenyList(hwId)) {
 
+            // Use SetupAPI to disable device
             if (DisableUsbDevice(dbccName))
                  snprintf(buf, BUF_LEN, "Blocked USB device (in deny list): %s (%s, HardwareID: %s)",
                     friendlyName ? friendlyName : "Unknown device",

@@ -1,7 +1,8 @@
 #include <windows.h>
 #include <setupapi.h>
 #include <stdio.h>
-#include "../include/devinfo.h"
+#include <tchar.h>
+#include "devinfo.h"
 
 
 LPSTR GetDevicePropByHandle(HDEVINFO deviceInfoHandle, PSP_DEVINFO_DATA deviceInfoData, DWORD property) {
@@ -88,9 +89,10 @@ LPSTR GetDevicePropByName(LPCSTR aDeviceInterfaceDbccName, DWORD property) {
 
 WINBOOL DisableUsbDevice(LPCTSTR aDeviceInterfaceDbccName) {
     /**
-     * @brief Disable device by dbcc_name
+     * @brief Disable device by dbcc_name with SetupAPI
      *
      * @details Similar to Device Manager's "disable" option. To enable again, use Device Manager
+     * Warning: some devices can't be blocked (such as certain input devices)
      */
     HDEVINFO deviceInfoSet;
     SP_DEVINFO_DATA deviceInfoData;

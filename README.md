@@ -11,7 +11,8 @@ Can block certain devices based on Hardware ID.
 
 ## Options
 
-* `install` &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  Install service *
+* `install` &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Install service *
+* `uninstall` &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Uninstall service *
 * `deny <HardwareID>` &nbsp; &nbsp;  Add device to deny list *
 * `allow <HardwareID>` &nbsp;  Remove device from deny list *
 * `denylist` &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  Print deny list

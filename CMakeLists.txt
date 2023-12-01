@@ -12,6 +12,9 @@ set(PROJECT_BINARY_DIR ${PROJECT_SOURCE_DIR}/build)
 
 #-------------------------------------#
 
+include_directories(src)
+include_directories(include)
+
 add_definitions(-DSVCNAME=\"${SVC_NAME}\")
 
 add_executable(usbmon main.c src/service.c src/devinfo.c src/usbmon.c src/event.c src/cfg.c)

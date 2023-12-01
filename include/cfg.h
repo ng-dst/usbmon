@@ -3,6 +3,8 @@
 
 #include <windows.h>
 
+void TransformRegistryKey(LPTSTR str);
+
 WINBOOL AddDeviceToDenyList(LPCTSTR hardwareId);
 WINBOOL RemoveDeviceFromDenyList(LPCTSTR hardwareId);
 

@@ -4,7 +4,9 @@
 #include <windows.h>
 
 
-void SvcInstall();
+int SvcInstall();
+int SvcUninstall();
+
 DWORD WINAPI SvcCtrlHandlerEx(DWORD, DWORD, LPVOID, LPVOID);
 void WINAPI SvcMain(DWORD, LPTSTR*);
 

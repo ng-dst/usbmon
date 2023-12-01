@@ -1,8 +1,8 @@
 #include <windows.h>
 #include <stdio.h>
-#include "include/service.h"
-#include "include/event.h"
-#include "include/cfg.h"
+#include "service.h"
+#include "event.h"
+#include "cfg.h"
 
 #pragma comment(lib, "advapi32.lib")
 
@@ -13,9 +13,12 @@ int main(int argc, char** argv) {
 
     // "install" - Install service *
     if (argc > 1 && !strcmpi(argv[1], "install")) {
-        SvcInstall();
-        return EXIT_SUCCESS;
+        return SvcInstall();
     }
+
+    // "uninstall" - Uninstall service *
+    if (argc > 1 && !strcmpi(argv[1], "uninstall"))
+        return SvcUninstall();
 
     // "deny <hwId>" - Add device to deny list *
     if (argc > 2 && !strcmpi(argv[1], "deny")) {
@@ -71,7 +74,8 @@ int main(int argc, char** argv) {
                      !strcmpi(argv[1], "help"))) {
         printf("Lab 7: USB Monitor service\n"
                "Available commands:\n"
-               "\tinstall                -  Install service (run as admin)\n"
+               "\tinstall [admin]        -  Install service (run as admin). To set admin context, specify key \"admin\"\n"
+               "\tuninstall              -  Uninstall service (run as admin)\n"
                "\tdeny <HardwareID>      -  Add device to deny list\n"
                "\tallow <HardwareID>     -  Remove device from deny list\n"
                "\tdenylist               -  Print deny list\n"
