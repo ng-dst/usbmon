@@ -47,6 +47,39 @@ Under this key:
 If some keys don't exist, they are created automatically.\
 If `LogFile` is not set, logs are sent to *_Event Log_* only.
 
+## Improvements
+
+Some Chinese flash drives may have strange Unicode hardware IDs, which can be confusing for Registry if set as a value name.
+
+It can be solved by storing hex-values for hardware IDs (possibly MD5 of ID string) with corresponding user-friendly name of rule.
+
+#### Example
+
+This scheme allows for quick dereference by hardware ID. Just calculate hash and check if it's there.
+
+* `DenyList\ `
+  * `9d2cff9017b505e8beb206df9fd2efb3` (_REG_SZ_) = `<rule_name>`
+  * < ... >
+
+#### Alternative
+
+This scheme allows for quick dereference by rule name. Also guarantees that rule names are unique, and it generally looks more natural.
+
+* `DenyList\ `
+  * `<rule_name>` (_REG_SZ_) = `9d2cff9017b505e8beb206df9fd2efb3`
+  * < ... >
+
+#### Supposed usage
+
+MD5 of Hardware IDs should appear in log file and Event Log instead of raw Hardware IDs.
+
+```
+usbmon.exe deny <name> <hwId_MD5>
+usbmon.exe allow <name> <hwId_MD5>
+```
+
+I don't know if I implement this in near future, though I hope so &nbsp;ฅ ^•ﻌ•^ ฅ &nbsp;°。
+
 ## References
 
 * Service template: https://learn.microsoft.com/en-us/windows/win32/services/svc-cpp
